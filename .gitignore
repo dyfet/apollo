@@ -1,0 +1,15 @@
+custom.mk
+
+target/
+vendor/
+.vs*/
+
+web/*.key
+web/*.crt
+web/*.conf
+
+*.log
+*.out
+*.tar
+*.tar.gz
+

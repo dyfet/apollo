@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Add Line</title>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+{{template "navbar" .}}
+<table width="100%">
+<tr>
+    <td align="left"><h1>Add Line</h1></td>
+    <td align="right" class="button-cell"><a href="/lines" class="button">Cancel</a></td>
+</tr>
+</table>
+
+<form id="create" method="POST" action="/lines">
+    <label class="label" for="ext">Extension:</label>
+    <input class="field" type="number" min="10" max="89" id="ext" name="ext" value="{{ .Id }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="type">Type:</label>
+    <input class="field" list="types" id="type" name="type">
+    <datalist id="types">
+        <option value="generic">
+        <option value="phone">
+        <option value="operator">
+        <option value="pager">
+        <option value="security">
+        <option value="service">
+        <option value="speak">
+        <option value="audio">
+        <option value="assist">
+        <option value="zone">
+    </datalist>
+    <div class="sep"><br></div>
+
+    <label class="label" for="display">Display Name:</label>
+    <input class="field" type="text" id="display" name="display" value="{{ .Line.Display }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="lines">Lines:</label>
+    <input class="field" type="number" min="1" max="32" id="lines" name="lines" value="{{ .Line.Lines }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="newp">Password:</label>
+    <input class="field" type="password" id="newp" name="newp" autocomplete="off">
+    <div class="sep"><br></div>
+
+    <label class="label" for="verify">Verify:</label>
+    <input class="field" type="password" id="verify" name="verify" autocomplete="off">
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Create</button></td>
+    </tr></table>
+</form>
+
+</body>
+</html>

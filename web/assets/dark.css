@@ -1,0 +1,12 @@
+body {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+a.download-tab {
+  color: lightgreen;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+

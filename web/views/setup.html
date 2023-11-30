@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Apollo Setup</title>
+<script src="assets/setup.js"></script>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+<h1>Welcome to Apollo for {{ .page.Realm }}</h1>
+<p>This first-time setup will generate an initial configuration file.</p>
+
+<div class="form">
+<form method="POST" action="/setup">
+    <label class="label" for="admin">Username:</label>
+    <input class="field" type="text" id="admin" name="admin" value="{{ .page.Admin }}" required>
+    <div class="sep"><br></div>
+
+    <label class="label" for="pass">Password:</label>
+    <input class="field" type="password" id="pass" name="pass" required>
+    <div class="sep"><br></div>
+
+    <label class="label" for="verify">Verify:</label>
+    <input class="field" type="password" id="verify" name="verify" required>
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Setup</button></td>
+    </tr></table>
+</form>
+</div>
+</body>
+</html>
+

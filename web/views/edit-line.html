@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Line {{ .Id }}</title>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+{{template "navbar" .}}
+<table width="100%">
+<tr>
+    <td align="left"><h1>Line {{ .Id }}</h1></td>
+    <td align="right" class="button-cell"><a href="/lines" class="button">Cancel</a></td>
+</tr>
+</table>
+<form>
+    <label class="label">Agent:</label>
+    <label class="value">{{if eq .Line.URL "none"}}
+        {{ .Line.Agent }}
+    {{else}}
+        <a class="link" href="{{ .Line.URL }}">{{ .Line.Agent }}</a>
+    {{end}}</label>
+    <br>
+    <label class="label">Count:</label>
+    <label class="value">{{ .Line.Count }}</label>
+    <br>
+    <label class="label">Presence:</label>
+    <label class="value">{{ .Line.Presence }}</label>
+    <br>
+    <label class="label">Type:</label>
+    <label class="value">{{ .Line.Type }}</label>
+</form>
+<br>
+
+<section>
+<hr>
+<h2>Editable Properties</h2>
+<form id="property" method="POST" action="/lines/{{ .Id }}">
+    <label class="label" for="caller">Caller:</label>
+    <input class="field" type="text" id="caller" name="caller" value="{{ .Line.Caller}}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="cabling">Cabling:</label>
+    <input class="field" type="text" id="cabling" name="cabling" value="{{ .Line.Cabling }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="display">Display Name:</label>
+    <input class="field" type="text" id="display" name="display" value="{{ .Line.Display }}" required>
+    <div class="sep"><br></div>
+
+    <label class="label" for="email">E-mail:</label>
+    <input class="field" type="text" id="email" name="email" value="{{ .Line.EMail }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="lines">Lines:</label>
+    <input class="field" type="number" min="1" max="30" id="lines" name="lines" value="{{ .Line.Lines }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="location">Location:</label>
+    <input class="field" type="text" id="location" name="location" value="{{ .Line.Location }}">
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Update</button></td>
+    </tr></table>
+</form>
+</section>
+
+<section>
+<hr>
+<h2>Password</h2>
+<form id="password" method="POST" action="/lines/{{ .Id }}/passwd">
+    <p class="intro">Change this user's registration password.  It will take
+    effect the next time the user's device registers with the server.</p>
+
+    <label class="label" for="pass">Password:</label>
+    <input class="field" type="password" id="pass" name="pass" autocomplete="off" value="" required>
+    <div class="sep"><br></div>
+
+    <label class="label" for="verify">Verify:</label>
+    <input class="field" type="password" id="verify" name="verify" autocomplete="off" value="" required>
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="danger" type="submit">Change</button></td>
+    </tr></table>
+</form>
+</section>
+
+<section>
+<hr>
+<h2>Danger</h2>
+<form id="delete" method="POST" action="/lines/{{ .Id }}/delete">
+    <p class="intro">Deactivate and remove this extension from your system.
+    You must manually enter the line number you wish to delete to confirm this
+    operation</p>
+
+    <label class="label" for="line">Line Number:</label>
+    <input class="field" type="text" id="line" name="line" value="" required>
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="danger" type="submit">Delete</button></td>
+    </tr></table>
+</section>
+
+</body>
+</html>

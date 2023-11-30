@@ -1,0 +1,189 @@
+/* Default light theme */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark theme */
+body.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+a.download-tab {
+  color: blue;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.navbar {
+  background-color: #333;
+  height: 40px;
+}
+
+.navitems {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.navitems li {
+  display: inline-block;
+}
+
+.navitems a {
+  display: block;
+  text-decoration: none;
+  color: lightgreen;
+  padding: 10px;
+}
+
+.navitems a:hover {
+  background-color: grey;
+}
+
+.navright {
+  margin-left: auto;
+}
+
+.scrollable {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+/* Style for the selected row */
+.selected {
+  background-color: yellow;
+}
+
+/* Style for the bottom buttons */
+.bottom {
+  margin-top: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.line {
+  display: flex;
+  margin: 20px;
+}
+
+.logo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url(/assets/logo.png);
+  background-size: cover;
+}
+
+input[type="submit"] {
+  display: inline-block;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: blue;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+th {
+  text-align: left;
+  border-bottom: 1px solid gray;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.danger {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #8B4000;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.danger:hover {
+  background-color: orange;
+}
+
+.button-cell {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.field {
+  color: inherit;
+  background: inherit;
+  margin-left: 5%;
+  margin-right: 5%;
+  border: 1px solid grey;
+  padding: 5px;
+}
+
+.value {
+  color: inherit;
+  background: inherit;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 5px;
+  display: inline-block;
+}
+
+.label {
+  color: inherit;
+  background: inherit;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 5px;
+  width: 200px;
+  text-align: right;
+  display: inline-block;
+}
+
+.sep {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.intro {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+
+

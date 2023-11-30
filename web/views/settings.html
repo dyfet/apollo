@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Apollo Settings</title>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+{{template "navbar" .}}
+<h1>Settings</h1>
+<form>
+    <label class="label">Current Theme:</label>
+    <label class="value">{{ .page.Theme }}</label>
+    <br>
+    <label class="label">Server Realm:</label>
+    <label class="value">{{ .page.Realm }}</label>
+    <br>
+    <label class="label">Default Password:</label>
+    <label class="value">{{ .page.Pass }}</label>
+</form>
+
+<section>
+<hr>
+<h2>Theme</h2>
+<form id="theme" method="POST" action="/settings/theme">
+    <p class="intro">Toggle the display theme between light and dark mode.
+    This change is persistently saved in the dynamic config.</p>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Toggle</button></td>
+    </tr></table>
+</section>
+
+<section>
+<hr>
+<h2>Realm and Algorithms</h2>
+<form id="realm" method="POST" action="/settings/realm">
+    <p><span style="color: red; font-weight: bold">WARNING</span>: Changing
+    the realm or the digest algorithm erases the encoded digests of ALL
+    encoded lines. These will have to be manually re-entered for each line.</p>
+
+    <p>Some devices may have old firmware which do not support SHA256 digests.
+    While it is generally recomended to use SHA256 alone, it may continue to
+    be nessisary to keep MD5 sip digest support enabled as well.</p>
+
+    <label class="label" for="digests">Digests Used:</label>
+    <input class="field" type="text" id="digests" name="digests" value="{{ .page.Digests }}" required>
+    <div class="sep"><br></div>
+
+    <label class="label" for="realm">New Realm:</label>
+    <input class="field" type="text" id="realm" name="realm" value="">
+    <div class="sep"><br></div>
+
+    <label class="label" for="verify">Verify Realm:</label>
+    <input class="field" type="text" id="verify" name="verify" value="">
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="danger" type="submit">Update</button></td>
+    </tr></table>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Line {{ .Id }}</title>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+{{template "navbar" .}}
+<table width="100%">
+<tr>
+    <td align="left"><h1>Line {{ .Id }}</h1></td>
+    <td align="right" class="button-cell"></td>
+</tr>
+</table>
+<form>
+    <label class="label">Agent:</label>
+    <label class="value">{{if eq .Line.URL "none"}}
+        {{ .Line.Agent }}
+    {{else}}
+        <a class="link" href="{{ .Line.URL }}">{{ .Line.Agent }}</a>
+    {{end}}</label>
+    <br>
+    <label class="label">Count:</label>
+    <label class="value">{{ .Line.Count }}</label>
+    <br>
+    <label class="label">Presence:</label>
+    <label class="value">{{ .Line.Presence }}</label>
+    <br>
+    <label class="label">Type:</label>
+    <label class="value">{{ .Line.Type }}</label>
+    <br>
+    <label class="label">Caller:</label>
+    <label class="value">{{ .Line.Caller }}</label>
+    <br>
+    <label class="label">Cabling:</label>
+    <label class="value">{{ .Line.Cabling }}</label>
+    <br>
+    <label class="label">Display Name:</label>
+    <label class="value">{{ .Line.Display }}</label>
+    <br>
+    <label class="label">E-mail:</label>
+    <label class="value">{{ .Line.EMail }}</label>
+    <br>
+    <label class="label">Lines:</label>
+    <label class="value">{{ .Line.Lines }}</label>
+    <br>
+    <label class="label">Location:</label>
+    <label class="value">{{ .Line.Location }}</label>
+</form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en">
+<title>Apollo Lines</title>
+{{template "style" .}}
+</head>
+
+<body class="{{ .page.Theme }}">
+{{template "navbar" .}}
+<table width="100%">
+    <tr>
+        <td align="left"><h1>Active Lines</h1></td>
+        <td align="right" class="button-cell"><a href="/lines/new" class="button">New</a></td>
+    </tr>
+</table>
+<table width="100%">
+    <thead>
+        <tr>
+            <th>Extension</th>
+            <th>Display Name</th>
+            <th>Lines</th>
+            <th>Type</th>
+            <th>Agent</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range .items }}
+        <tr>
+            <td><a class="link" href="/lines/{{ .Id }}">{{ .Id }}</a></td>
+            <td>{{ .Line.Display }}</td>
+            <td>{{ .Line.Lines }}</td>
+            <td>{{ .Line.Type }}</td>
+            <td>{{if eq .Line.URL "none"}}
+                {{ .Line.Agent }}
+            {{else}}
+                <a class="link" href="{{ .Line.URL }}">{{ .Line.Agent }}</a>
+            {{end}}</td>
+            <td>{{ .Line.Location }}</td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+</body>
+</html>
