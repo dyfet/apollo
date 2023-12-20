@@ -14,6 +14,20 @@ ifndef	BUILD_MODE
 BUILD_MODE := default
 endif
 
+ifndef	GO
+GO := go
+endif
+
+STATIC_CHECK	:= $(shell which staticcheck)
+ifeq ($(STATIC_CHECK),)
+STATIC_CHECK	:= true
+endif
+
+GOVULN_CHECK	:= $(shell which govulncheck)
+ifeq ($(GOVULN_CHECK),)
+GOVULN_CHECK	:= true
+endif
+
 GOVER=$(shell grep ^go <go.mod)
 TARGET := $(CURDIR)/target
 export GOCACHE := $(TARGET)/cache
@@ -25,33 +39,38 @@ docs:	required
 	@doc2go -out target/docs ./...
 
 lint:	required
-	@go fmt ./...
-	@go mod tidy
-	@staticcheck ./...
+	@$(GO) fmt ./...
+	@$(GO) mod tidy
+	@$(STATIC_CHECK) ./...
 
 vet:	required
-	@go vet ./...
-	@govulncheck ./...
+	@$(GO) vet ./...
+	@$(GOVULN_CHECK) ./...
 
 fix:	required
-	@go fix ./...
+	@$(GO) fix ./...
 
 test:
-	@go test ./...
+	@$(GO) test ./...
+
+stage:
+	rm -rf target/stage
+	mkdir -p target/stage
+	$(MAKE) DESTDIR=$(CURDIR)/target/stage install
 
 cover:	vet
-	@go test -coverprofile=coverage.out ./...
+	@$(GO) test -coverprofile=coverage.out ./...
 
 go.sum:	go.mod
-	@go mod tidy
+	@$(GO) mod tidy
 
 # if no vendor directory (clean) or old in git checkouts
 vendor:	go.sum
 	@if test -d .git ; then \
 		rm -rf vendor ;\
-		go mod vendor ;\
+		$(GO) mod vendor ;\
 	elif test ! -d vendor ; then \
-		go mod vendor ;\
+		$(GO) mod vendor ;\
 	else \
 		touch vendor ;\
 	fi

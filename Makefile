@@ -28,11 +28,11 @@ sinclude custom.mk
 
 build:  lint
 	@mkdir -p target/debug
-	@CGO_ENABLED=1 go build -v -tags debug,$(TAGS) -ldflags '-X main.version=$(VERSION) -X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/debug ./...
+	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.version=$(VERSION) -X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/debug ./...
 
 release:	required
 	@mkdir -p target/release
-	@CGO_ENABLED=1 go build --buildmode=$(BUILD_MODE) -v -mod vendor -tags release,$(TAGS) -ldflags '-s -w -X main.mediaData=$(LOCALSTATEDIR)/lib/bordeaux -X main.version=$(VERSION) -X main.etcPrefix=$(SYSCONFDIR) -X main.workingDir=$(LOCALSTATEDIR)/lib/coventry -X main.appDataDir=$(APPDATADIR) -X main.logPrefix=$(LOGPREFIXDIR)' -o target/release ./...
+	@CGO_ENABLED=1 $(GO) build --buildmode=$(BUILD_MODE) -v -mod vendor -tags release,$(TAGS) -ldflags '-s -w -X main.mediaData=$(LOCALSTATEDIR)/lib/bordeaux -X main.version=$(VERSION) -X main.etcPrefix=$(SYSCONFDIR) -X main.workingDir=$(LOCALSTATEDIR)/lib/coventry -X main.appDataDir=$(APPDATADIR) -X main.logPrefix=$(LOGPREFIXDIR)' -o target/release ./...
 
 debug:	build
 
@@ -53,7 +53,7 @@ install:        release
 		$(DESTDIR)$(APPDATADIR)/views \;
 
 clean:
-	@go clean ./...
+	@$(GO) clean ./...
 	@rm -rf target *.out
 	@rm -f $(PROJECT)-*.tar.gz $(PROJECT)-*.tar
 	@rm -f *.log
