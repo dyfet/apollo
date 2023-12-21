@@ -18,12 +18,12 @@ ifndef	GO
 GO := go
 endif
 
-STATIC_CHECK	:= $(shell which staticcheck)
+STATIC_CHECK	:= $(shell which staticcheck 2>/dev/null || true )
 ifeq ($(STATIC_CHECK),)
 STATIC_CHECK	:= true
 endif
 
-GOVULN_CHECK	:= $(shell which govulncheck)
+GOVULN_CHECK	:= $(shell which govulncheck 2>/dev/null || true)
 ifeq ($(GOVULN_CHECK),)
 GOVULN_CHECK	:= true
 endif
