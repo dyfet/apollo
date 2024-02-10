@@ -6,8 +6,8 @@ require (
 	github.com/alexflint/go-arg v1.4.3
 	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/gofiber/template/html/v2 v2.0.4
-	github.com/tychosoft/service v1.0.0
 	gopkg.in/ini.v1 v1.67.0
+	www.tychosoft.com/tychosoft/service v1.0.1
 )
 
 require (

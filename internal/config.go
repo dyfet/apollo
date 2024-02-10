@@ -25,7 +25,7 @@ import (
 
 	"gopkg.in/ini.v1"
 
-	"github.com/tychosoft/service"
+	"www.tychosoft.com/tychosoft/service"
 )
 
 type Line struct {

@@ -29,10 +29,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/template/html/v2"
-	"github.com/tychosoft/service"
 	"gopkg.in/ini.v1"
 
 	ipc "apollo/internal"
+	"www.tychosoft.com/tychosoft/service"
 )
 
 // Argument parser....

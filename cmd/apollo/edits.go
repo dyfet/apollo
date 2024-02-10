@@ -19,9 +19,9 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/tychosoft/service"
 
 	ipc "apollo/internal"
+	"www.tychosoft.com/tychosoft/service"
 )
 
 func addLine(ctx *fiber.Ctx) error {

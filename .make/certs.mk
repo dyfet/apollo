@@ -12,6 +12,6 @@
 
 certs:
 	@rm -f web/server.key web/server.crt
-	@openssl ecparam -genkey -name secp384r1 -out web/server.key
-	@openssl req -new -x509 -sha256 -key web/server.key -out web/server.crt -days 3650
+	@openssl ecparam -genkey -name secp384r1 -out $(TESTDIR)/server.key
+	@openssl req -new -x509 -sha256 -key $(TESTDIR)/server.key -out $(TESTDIR)/server.crt -days 3650
 

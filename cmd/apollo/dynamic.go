@@ -19,10 +19,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tychosoft/service"
 	"gopkg.in/ini.v1"
 
 	ipc "apollo/internal"
+	"www.tychosoft.com/tychosoft/service"
 )
 
 type User struct {
