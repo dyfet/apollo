@@ -35,7 +35,7 @@ export PATH := $(TARGET)/debug:${PATH}
 
 docs:	required
 	@rm -rf target/docs
-	@mkdir -p target/docs
+	@install -d target/docs
 	@doc2go -out target/docs ./...
 
 lint:	required
@@ -54,9 +54,9 @@ test:
 	@$(GO) test ./...
 
 stage:
-	rm -rf target/stage
-	mkdir -p target/stage
-	$(MAKE) DESTDIR=$(CURDIR)/target/stage install
+	@rm -rf target/stage
+	@install -d target/stage
+	@$(MAKE) DESTDIR=$(CURDIR)/target/stage install
 
 cover:	vet
 	@$(GO) test -coverprofile=coverage.out ./...
