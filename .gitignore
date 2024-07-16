@@ -13,3 +13,12 @@ web/*.conf
 *.tar
 *.tar.gz
 
+# strip out qtcreator from git
+.qtc_*/
+*.user
+*.cflags
+*.config
+*.creator
+*.cxxflags
+*.files
+*.includes
