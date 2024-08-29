@@ -22,7 +22,7 @@ import (
 	"gopkg.in/ini.v1"
 
 	ipc "apollo/internal"
-	"www.tychosoft.com/tychosoft/service"
+	"gitlab.com/tychosoft/service"
 )
 
 type User struct {

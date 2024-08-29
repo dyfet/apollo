@@ -21,7 +21,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	ipc "apollo/internal"
-	"www.tychosoft.com/tychosoft/service"
+	"gitlab.com/tychosoft/service"
 )
 
 func viewPing(ctx *fiber.Ctx) error {

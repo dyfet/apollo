@@ -26,7 +26,7 @@ import (
 	"os"
 	"unsafe"
 
-	"www.tychosoft.com/tychosoft/service"
+	"gitlab.com/tychosoft/service"
 )
 
 type IpcInfo struct {
