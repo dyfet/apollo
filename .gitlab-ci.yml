@@ -6,7 +6,7 @@ merge:
   stage: test
   script:
     - apk add make musl-dev go
-    - make test | tee test.log
+    - go test ./... | tee test.log
   only:
     - merge_requests
   artifacts:
