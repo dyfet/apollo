@@ -24,6 +24,20 @@ entries in the ui. This allows for pre-set configs for things like voice mail
 extensions or door phones, while still allowing the user to modify other
 extenstions freely.
 
+## Distributions
+
+Distributions of this package are provided as detached source tarballs made
+from a tagged release from our internal source repository. These stand-alone
+detached tarballs can be used to make packages for many GNU/Linux systems, and
+for BSD ports. These tagged releases already contain all vendoring. They may be
+used to build and install the software directly on a target platform without
+internet connections.
+
+The latest public release source tarball can be found at either
+https://www.tychosoft.com/tychosoft/-/packages/generic/apollo.  An unvendored
+detached tarball may also be auto-generated from the projects public gitlab
+release page, which may also provides access to past releases as well.
+
 ## Installation
 
 From a detached tarball with embedded vendor builds, make "install" is

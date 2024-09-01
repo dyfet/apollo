@@ -12,7 +12,7 @@ and stable survivable public location.
 
 ## CI Integration
 
-Gitlab is used for publoc ci integration. Since the most common deployment
+Gitlab is used for public ci integration. Since the most common deployment
 platform I use is Alpine, it defaults to this. This also minimizes ci
 processing overhead. There are only a few types of ci jobs I may use. One is to
 evaluate merge requests, and if this is broken hopefully whomever submits a
