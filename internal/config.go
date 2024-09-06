@@ -243,6 +243,12 @@ func GetServer() *ini.Section {
 	return coventryConfig.Section("server")
 }
 
+func GetWeather() *ini.Section {
+	lock.RLock()
+	defer lock.RUnlock()
+	return coventryConfig.Section("weather")
+}
+
 func GetRooms() *ini.Section {
 	lock.RLock()
 	defer lock.RUnlock()

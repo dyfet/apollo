@@ -18,9 +18,13 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"net"
+	"strings"
 	"syscall"
 
+	"github.com/glendc/go-external-ip"
 	"github.com/gofiber/fiber/v2"
+	"github.com/ipinfo/go/v2/ipinfo"
 
 	ipc "apollo/internal"
 	"gitlab.com/tychosoft/service"
@@ -76,6 +80,83 @@ func postSetup(ctx *fiber.Ctx) error {
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }
 
+func locationSetup(ctx *fiber.Ctx) error {
+	lock.Lock()
+	defer lock.Unlock()
+	ipc.UpdateCoventry("server", "location", ctx.FormValue("geolocated"))
+	ipc.UpdateCoventry("server", "where", ctx.FormValue("where"))
+	ipc.UpdateCoventry("server", "city", ctx.FormValue("city"))
+	ipc.UpdateCoventry("server", "region", ctx.FormValue("region"))
+	ipc.UpdateCoventry("server", "postal", ctx.FormValue("postal"))
+	ipc.SaveCoventry()
+	service.Debug(3, "set where ", ctx.FormValue("where"))
+
+	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
+	return ctx.Redirect("/lines", fiber.StatusSeeOther)
+}
+
+func internetSetup(ctx *fiber.Ctx) error {
+	pubip := ctx.FormValue("publicip")
+	token := ctx.FormValue("iptoken")
+
+	service.Info("looking up address...")
+	// If offline, try finding address
+	if pubip == "offline" || pubip == "down" || pubip == "auto" {
+		consensus := externalip.DefaultConsensus(nil, nil)
+		ip, err := consensus.ExternalIP()
+		if err == nil {
+			pubip = ip.String()
+			service.Info("public address ", pubip)
+		}
+	}
+
+	// Process token
+
+	if pubip == "offline" || pubip == "down" || pubip == "auto" {
+		publicIp = "down"
+		return ctx.Redirect("/settings", fiber.StatusSeeOther)
+	}
+	if pubip == "offline" || pubip == "down" {
+		pubip = "auto"
+	}
+	publicIp = pubip
+	service.Info("looking up location...")
+
+	lock.Lock()
+	defer lock.Unlock()
+	ipc.UpdateCoventry("server", "token", token)
+	ipc.SaveCoventry()
+	service.Debug(3, "set token ", token)
+
+	client := ipinfo.NewClient(nil, nil, token)
+	info, err := client.GetIPInfo(net.ParseIP(pubip))
+	if err != nil {
+		service.Error(err)
+		syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
+		return ctx.Redirect("/lines", fiber.StatusSeeOther)
+
+	}
+
+	location := info.Location
+	country := strings.ToLower(info.Country)
+	city := info.City
+	region := info.Region
+	postal := info.Postal
+	timezone := info.Timezone
+	service.Info("located: ", location, " ", city, ", ", region, ",", postal, ", ", country)
+
+	ipc.UpdateCoventry("server", "location", location)
+	ipc.UpdateCoventry("server", "city", city)
+	ipc.UpdateCoventry("server", "region", region)
+	ipc.UpdateCoventry("server", "postal", postal)
+	ipc.UpdateCoventry("server", "country", country)
+	ipc.UpdateCoventry("weather", "timezone", timezone)
+	ipc.SaveCoventry()
+
+	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
+	return ctx.Redirect("/lines", fiber.StatusSeeOther)
+}
+
 func themeSetup(ctx *fiber.Ctx) error {
 	server := ipc.GetServer()
 	theme := ipc.GetConfig(server, "theme", "dark")
@@ -85,6 +166,7 @@ func themeSetup(ctx *fiber.Ctx) error {
 		theme = "light"
 	}
 
+	service.Debug(3, "set theme ", theme)
 	ipc.UpdateCoventry("server", "theme", theme)
 	ipc.SaveCoventry()
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)

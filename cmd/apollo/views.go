@@ -113,7 +113,8 @@ func viewSetup(ctx *fiber.Ctx) error {
 	lock.RLock()
 	defer lock.RUnlock()
 	err := ctx.Render("setup", fiber.Map{
-		"page": config,
+		"page":    config,
+		"weather": weather,
 	})
 	if err != nil {
 		service.Error(err)

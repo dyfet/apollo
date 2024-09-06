@@ -58,16 +58,32 @@ type Config struct {
 	Tls     bool   `ini:"tls"`
 
 	// page specific and branding
-	Logo  string `ini:"logo"`
-	Home  string `ini:"home"`
-	Views string `ini:"views"`
-	Theme string `ini:"theme"`
+	Logo     string `ini:"logo"`
+	Home     string `ini:"home"`
+	Views    string `ini:"views"`
+	Theme    string `ini:"theme"`
+	Weather  string `ini:"weather"`
+	Location string `ini:"location"`
+	Where    string `ini:"where"`
+	City     string `ini:"city"`
+	Region   string `ini:"region"`
+	Postal   string `ini:"postal"`
+	Country  string `ini:"country"`
+	IpToken  string `ini:"token"`
 
 	// other config info sent to page
-	Realm   string `ini:"-"`
-	Digests string `ini:"-"`
-	Admin   string `ini:"-"`
-	Pass    string `ini:"-"`
+	Realm    string `ini:"-"`
+	Digests  string `ini:"-"`
+	Admin    string `ini:"-"`
+	Pass     string `ini:"-"`
+	PublicIp string `ini:"-"`
+}
+
+type Weather struct {
+	Timezone string `ini:"timezone"`
+	Temps    string `ini:"temp"`
+	Speeds   string `ini:"speed"`
+	Depths   string `ini:"depth"`
 }
 
 var (
@@ -78,11 +94,13 @@ var (
 	etcPrefix  = "/etc"
 	logPrefix  = "/var/log"
 	version    = "unknown"
+	publicIp   = "auto"
 
 	// globals
-	args   *Args   = &Args{Prefix: workingDir, Media: mediaData, Config: etcPrefix + "/apollo.conf"}
-	config *Config = nil
-	lock   sync.RWMutex
+	args    *Args    = &Args{Prefix: workingDir, Media: mediaData, Config: etcPrefix + "/apollo.conf"}
+	config  *Config  = nil
+	weather *Weather = nil
+	lock    sync.RWMutex
 )
 
 func (Args) Version() string {
@@ -135,16 +153,32 @@ func load() {
 		Crtfile: "./server.crt",
 
 		// page config
-		Home:  "https://www.tychosoft.com",
-		Logo:  "/assets/logo.png",
-		Views: "en",
-		Theme: "dark",
+		Home:     "https://www.tychosoft.com",
+		Logo:     "/assets/logo.png",
+		Views:    "en",
+		Theme:    "dark",
+		Location: "unspecified",
+		PublicIp: publicIp,
+		IpToken:  "*Your API Token*",
+		Where:    "unknown",
+		City:     "unknown",
+		Region:   "unknown",
+		Postal:   "unknown",
+		Country:  "us",
+	}
+
+	new_weather := Weather{
+		Timezone: "unknown",
+		Temps:    "fahrenheit",
+		Speeds:   "mph",
+		Depths:   "inch",
 	}
 
 	configs, err := ini.LoadSources(ini.LoadOptions{Loose: true, Insensitive: true}, args.Config)
 	if err == nil {
 		// map and reset from args if not default
 		configs.Section("server").MapTo(&new_config)
+		configs.Section("weather").MapTo(&new_weather)
 		if args.Port != 8080 {
 			new_config.Port = args.Port
 		}
@@ -175,10 +209,19 @@ func load() {
 
 	// set page values from full config...
 	server := ipc.GetServer()
+	forecast := ipc.GetWeather()
 	new_config.Digests = ipc.Algorithm
 	new_config.Realm = ipc.Realm
 	new_config.Admin = ipc.GetConfig(server, "webadmin", "admin")
 	new_config.Theme = ipc.GetConfig(server, "theme", "dark")
+	new_config.IpToken = ipc.GetConfig(server, "token", "*Your API Token*")
+	new_config.Location = ipc.GetConfig(server, "location", "unspecified")
+	new_config.Where = ipc.GetConfig(server, "where", "none")
+	new_config.City = ipc.GetConfig(server, "city", "unknown")
+	new_config.Region = ipc.GetConfig(server, "region", "unknown")
+	new_config.Postal = ipc.GetConfig(server, "postal", "unknown")
+
+	new_weather.Timezone = ipc.GetConfig(forecast, "timezone", "unknown")
 
 	common := ipc.GetCommon()
 	new_config.Pass = ipc.GetConfig(common, "password", "")
@@ -190,6 +233,7 @@ func load() {
 	lock.Lock()
 	defer lock.Unlock()
 	config = &new_config
+	weather = &new_weather
 }
 
 func main() {
@@ -249,6 +293,8 @@ func main() {
 	app.Post("/lines/:id/delete", admin, deleteLine)
 	app.Post("/lines/:id/passwd", admin, passwdLine)
 	app.Post("/settings/theme", admin, themeSetup)
+	app.Post("/settings/internet", admin, internetSetup)
+	app.Post("/settings/location", admin, locationSetup)
 	app.Delete("/lines/:id", admin, deleteLine)
 
 	// client access api

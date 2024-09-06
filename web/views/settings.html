@@ -31,7 +31,61 @@
         <td align="left"></td>
         <td align="right" class="button-cell"><button class="button" type="submit">Toggle</button></td>
     </tr></table>
+</form>
 </section>
+
+<section>
+<hr>
+<h2>Internet</h2>
+<form id="internet" method="POST" action="/settings/internet">
+    <p class="intro">Specify public appearing ip address and token.</p>
+    <label class="label" for="publicip">Public Ip:</label>
+    <input class="field" type="text" id="publicip" name="publicip" value="{{ .page.PublicIp }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="iotoken">API Token:</label>
+    <input class="field" type="text" id="iptoken" name="iptoken" value="{{ .page.IpToken}}">
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Locate</button></td>
+    </tr></table>
+</form>
+</section>
+
+<section>
+<hr>
+<h2>Location</h2>
+<form id="location" method="POST" action="/settings/location">
+    <p class="intro">Specify location of server.</p>
+    <label class="label" for="geolocated">Geo Location:</label>
+    <input class="field" type="text" id="geolocated" name="geolocated" value="{{ .page.Location }}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="where">Street Address:</label>
+    <input class="field" type="text" id="where" name="where" value="{{ .page.Where}}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="city">City:</label>
+    <input class="field" type="text" id="city" name="city" value="{{ .page.City}}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="region">State:</label>
+    <input class="field" type="text" id="region" name="region" value="{{ .page.Region}}">
+    <div class="sep"><br></div>
+
+    <label class="label" for="postal">Zip:</label>
+    <input class="field" type="text" id="postal" name="postal" value="{{ .page.Postal}}">
+    <div class="sep"><br></div>
+
+    <table width="100%"><tr>
+        <td align="left"></td>
+        <td align="right" class="button-cell"><button class="button" type="submit">Update</button></td>
+    </tr></table>
+</form>
+</section>
+
 
 <section>
 <hr>
@@ -61,6 +115,9 @@
         <td align="left"></td>
         <td align="right" class="button-cell"><button class="danger" type="submit">Update</button></td>
     </tr></table>
+</form>
+</section>
+
 </body>
 </html>
 

@@ -4,8 +4,10 @@ go 1.19
 
 require (
 	github.com/alexflint/go-arg v1.4.3
+	github.com/glendc/go-external-ip v0.1.0
 	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/gofiber/template/html/v2 v2.0.4
+	github.com/ipinfo/go/v2 v2.10.0
 	gitlab.com/tychosoft/service v1.0.2
 	gopkg.in/ini.v1 v1.67.0
 )
@@ -21,6 +23,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/savsgio/dictpool v0.0.0-20221023140959-7bf2e61cea94 // indirect
@@ -29,5 +32,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.47.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 )

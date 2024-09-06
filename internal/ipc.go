@@ -52,6 +52,7 @@ var (
 	ipcCoventry string
 	ipcRegistry uintptr
 	registryMap *C.pbx_reg_t = nil
+	instance                 = 0
 )
 
 func VerifyToken(token string) int {
@@ -64,10 +65,15 @@ func VerifyToken(token string) int {
 	return int(C.verify_user(registryMap, cs_token))
 }
 
+func ipcInstance() int {
+	return instance
+}
+
 func ReloadCoventry() error {
 	cs_path := C.CString(ipcCoventry)
 	defer C.free(unsafe.Pointer(cs_path))
 	result := int(C.reload_coventry(cs_path))
+	instance++
 	if result < 0 {
 		return fmt.Errorf("mqueue error %d", result)
 	}
