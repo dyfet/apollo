@@ -8,7 +8,7 @@ themes are available and the ui uses high contrast colors to help make it
 easier for visually impaired users. Borders are often outlined for similar
 reasons. The ui goals are simplicity and discoverability.
 
-## 1. Device Setup
+## Device Setup
 
 Apollo interacts with Coventry (and Bordeaux) thru IPC services (posix message
 queues and shared memory) and by manipulating config files. It can provide web
@@ -27,7 +27,7 @@ Apollo config "changes" such as global configs, extension lines, passwords, and
 the web admin user. You can restore Apollo to it's initial install state simply
 by removing it.
 
-## 2. Line Management
+## Line Management
 
 Once setup you always login to the line management screen. This shows you what
 current extension lines you have defined and a common navigation bar at the top
@@ -37,7 +37,7 @@ detailed view of an individual extension can be shown. This also lets you add
 an extension, modify an existing entry such as to change it's display name or
 registration password, or to remote it.
 
-## 3. Group Management
+## Group Management
 
 Groups are a set of lines that can be accessed thru a virtual (3 digit or
 larger) extension number. A single line may be a laptop, and another may be a
@@ -53,33 +53,44 @@ ring immediately, and coverage positions can start ringing later if it is not
 picked up. Voice mail can then be implimented as a later ringing call coverage
 operation in Coventry, rather than thru traditional call forwarding.
 
-## 4. Contact Management
+## Contact Management
 
 Contact management includes personal (per user) and global speed dialing. It
 will also eventually include directories for external numbers.
 
-## 5. Settings Management
+## Settings Management
 
 These are global settings that can be changed without reseting all Apollo's
 dynamic.conf entries. This typically includes the current theme and the web
 admin password. It can in the future include info on upstream dialing
 providers.
 
-## 6. Trouble Ticketing
+Devide settings includes support for location. This will be used for emergency
+services, for collecting weather information for phone devices, and similar
+kinds of functionality. An API token is used to auto-config a location with the
+ipinfo service. Usually setup only needs to be done once, since it is for the
+server's physical location.
+
+## Trouble Ticketing
 
 Trouble ticketing and basic tracking will be added. This will include basic
 cable plan management as well.
 
-## 7. Call Accounting
+## Call Accounting
 
-Call accounting of external traffic is to be added.
+Call accounting of external traffic is to be added. This may use the device
+token and ipinfo service to facilitate detection of where incoming and outgoing
+calls are coming from and going to.
 
-## 8. User Page
+## User Page
 
 A user "page" may become available where a user enters their line extension and
 password, and can the access personal settings they can directly maintain on
 their own, and issue service requests.
 
-## 9. Api services
+## Api services
 
-Pure web api services will be added thru Apollo.
+Pure web api services exist thru Apollo. These are used by endpoint agents like
+partisipate, and perhaps also tokage. In particular, there is a roster service
+to build partisipate's local call directory.
+
