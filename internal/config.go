@@ -97,7 +97,7 @@ func defaultConfig() error {
 	var section *ini.Section = nil
 
 	section = coventryConfig.Section("server")
-	if err == nil && !section.HasKey("sitename") {
+	if !section.HasKey("sitename") {
 		_, err = section.NewKey("sitename", "Coventry Server")
 	}
 
@@ -163,7 +163,7 @@ func defaultConfig() error {
 
 	if err == nil && !coventryConfig.HasSection("features") {
 		section = coventryConfig.Section("features")
-		if err == nil && !section.HasKey("*99") {
+		if !section.HasKey("*99") {
 			_, err = section.NewKey("*99", "echo")
 		}
 		if err == nil && !section.HasKey("*98") {

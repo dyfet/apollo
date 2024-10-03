@@ -8,7 +8,7 @@ the config is not generated or downloaded for externally managed Coventry
 devices. It is also the point of non-sip based network api contact, and can
 provide additional client support services such as rosters and dialing
 directories for local Coventry specific endpoints like Partisipate. Apollo
-requires and suppliments an install of Coventry to be at all useful.
+requires and supplements an install of Coventry to be at all useful.
 
 ## Dependencies
 
@@ -22,7 +22,7 @@ While most Coventry features can be manipulated over a Web ui thru Apollo, a
 Coventry "custom.conf" can override these settings and produce read-only
 entries in the ui. This allows for pre-set configs for things like voice mail
 extensions or door phones, while still allowing the user to modify other
-extenstions freely.
+extensions freely.
 
 ## Distributions
 
@@ -34,7 +34,7 @@ used to build and install the software directly on a target platform without
 internet connections.
 
 The latest public release source tarball can be found at either
-https://www.tychosoft.com/tychosoft/-/packages/generic/apollo.  An unvendored
+https://www.tychosoft.com/tychosoft/-/packages/generic/apollo.  An un-vendored
 detached tarball may also be auto-generated from the projects public gitlab
 release page, which may also provides access to past releases as well.
 

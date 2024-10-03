@@ -40,9 +40,9 @@ func dynInit(port uint16, tls bool) {
 	var opt = ini.LoadOptions{Loose: true, Insensitive: true}
 	var err error
 	var web = fmt.Sprintf("%d", port)
-	var covpath = workingDir + "/dynamic.conf"
+	var iniCoventry = workingDir + "/dynamic.conf"
 
-	dynCoventry, err = ini.LoadSources(opt, covpath)
+	dynCoventry, err = ini.LoadSources(opt, iniCoventry)
 	if err != nil {
 		dynCoventry = &ini.File{}
 	}
@@ -63,8 +63,8 @@ func dynInit(port uint16, tls bool) {
 		Username: ipc.GetConfig(section, "webadmin", "admin"),
 		Password: ipc.GetConfig(section, "webpass", "XXX"),
 	}
-	err = dynCoventry.SaveTo(covpath)
-	os.Chmod(covpath, 0600)
+	err = dynCoventry.SaveTo(iniCoventry)
+	os.Chmod(iniCoventry, 0600)
 	if err == nil {
 		err = ipc.ReloadCoventry()
 	}

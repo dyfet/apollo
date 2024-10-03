@@ -64,8 +64,8 @@ func postSetup(ctx *fiber.Ctx) error {
 	section.NewKey("webpass", passwd)
 	ipc.SetConfig(section, "webadmin", admin)
 
-	covpath := workingDir + "/dynamic.conf"
-	err := dynCoventry.SaveTo(covpath)
+	iniCoventry := workingDir + "/dynamic.conf"
+	err := dynCoventry.SaveTo(iniCoventry)
 	if err != nil {
 		service.Error(err)
 		return ctx.Status(fiber.StatusBadRequest).SendString("Cannot save setup")

@@ -53,7 +53,7 @@ func passwdLine(ctx *fiber.Ctx) error {
 	}
 
 	if !line.Editable {
-		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changable")
+		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changeable")
 	}
 
 	save := ipc.SavedLine(id)
@@ -140,7 +140,7 @@ func postLine(ctx *fiber.Ctx) error {
 	}
 
 	if !line.Editable {
-		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changable")
+		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changeable")
 	}
 
 	save := ipc.SavedLine(id)
