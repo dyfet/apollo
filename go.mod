@@ -8,7 +8,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.46.0
 	github.com/gofiber/template/html/v2 v2.0.4
 	github.com/ipinfo/go/v2 v2.10.0
-	gitlab.com/tychosoft/service v1.0.2
+	gitlab.com/tychosoft/service v1.1.0
 	gopkg.in/ini.v1 v1.67.0
 )
 

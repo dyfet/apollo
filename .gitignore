@@ -2,6 +2,7 @@ custom.mk
 
 target/
 vendor/
+.idea/
 .vs*/
 
 web/*.key

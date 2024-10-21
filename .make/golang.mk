@@ -58,7 +58,7 @@ stage:
 	@install -d target/stage
 	@$(MAKE) DESTDIR=$(CURDIR)/target/stage install
 
-cover:	vet
+cover:
 	@$(GO) test -coverprofile=coverage.out ./...
 
 go.sum:	go.mod

@@ -129,16 +129,6 @@ func init() {
 			os.Args[pos] = "--verbose=5"
 		}
 	}
-	arg.MustParse(args)
-
-	// config service
-	logPath := logPrefix + "/apollo.log"
-	service.Logger(args.Verbose, logPath)
-	load()
-	err := os.Chdir(config.Prefix)
-	if err != nil {
-		service.Fail(1, err)
-	}
 }
 
 func load() {
@@ -237,6 +227,16 @@ func load() {
 }
 
 func main() {
+	// config and setup service
+	arg.MustParse(args)
+	logPath := logPrefix + "/apollo.log"
+	service.Logger(args.Verbose, logPath)
+	load()
+	err := os.Chdir(config.Prefix)
+	if err != nil {
+		service.Fail(1, err)
+	}
+
 	// setup app and routes
 	address := fmt.Sprintf("%s:%v", config.Host, config.Port)
 	aging := 600
