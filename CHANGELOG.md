@@ -1,5 +1,10 @@
 # Release Notes
 
+## v0.2.3
+- Updated service version
+- Added unit tests
+- Improved make builds
+
 ## v0.2.2
 - Configure and update server location
 - Better cross-platform make golang support
