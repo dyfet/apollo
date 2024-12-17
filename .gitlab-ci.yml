@@ -2,9 +2,10 @@ stages:
   - test
 
 merge:
-  image: alpine
+  image: alpine:edge
   stage: test
   script:
+    - apk update
     - apk add make musl-dev go
     - go test ./... | tee test.log
   only:

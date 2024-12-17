@@ -27,16 +27,11 @@ extensions freely.
 ## Distributions
 
 Distributions of this package are provided as detached source tarballs made
-from a tagged release from our internal source repository. These stand-alone
-detached tarballs can be used to make packages for many GNU/Linux systems, and
-for BSD ports. These tagged releases already contain all vendoring. They may be
-used to build and install the software directly on a target platform without
-internet connections.
-
-The latest public release source tarball can be found at either
-https://www.tychosoft.com/tychosoft/-/packages/generic/apollo.  An un-vendored
-detached tarball may also be auto-generated from the projects public gitlab
-release page, which may also provides access to past releases as well.
+from a tagged release from our public git repository or by building the dist
+target. These stand-alone detached tarballs can be used to make packages for
+many GNU/Linux systems, and for BSD ports. These tagged releases already
+contain all vendoring. They may be used to build and install the software
+directly on a target platform without internet connections.
 
 ## Installation
 
@@ -52,10 +47,9 @@ packaging.
 
 This project is offered as free (as in freedom) software for public use and has
 a public project page at https://www.gitlab.com/tychosoft/apollo which has an
-issue tracker where people can submit public bug reports, a wiki for hosting
-project documentation, and a public git repository. Patches and merge requests
-may be submitted in the issue tracker or thru email. Support requests and other
-kinds of inquiries may also be sent thru the tychosoft gitlab help desktop
-service. Other details about participation may be found in the Contributing
-page.
+issue tracker where people can submit public bug reports and a public git
+repository. Patches and merge requests may be submitted in the issue tracker or
+thru email. Support requests and other kinds of inquiries may also be sent thru
+the tychosoft gitlab help desktop service. Other details about participation
+may be found in CONTRIBUTING.md.
 
