@@ -11,17 +11,19 @@
 # Project constants
 PROJECT := apollo
 VERSION := 0.2.3
-PATH := ./target/debug:${PATH}
+ORIGIN	:= gitlab:tychosoft/
+PATH	:= $(PWD)/target/debug:${PATH}
 TESTDIR := $(PWD)/web
 
 # Debug build detects
 DETECT_COVENTRY = $(shell .make/varlib.sh $(PWD)/web coventry)
 DETECT_BORDEAUX = $(shell .make/varlib.sh $(PWD)/web bordeaux)
 
-.PHONY: all required version build debug release install clean
+.PHONY: all required build debug release install clean verify
 
 all:            build           # default target debug
 required:       vendor          # required to build
+verify:		test		# verify builds
 
 # Define or override custom env
 sinclude custom.mk
@@ -57,9 +59,6 @@ clean:
 	@rm -rf target *.out
 	@rm -f $(PROJECT)-*.tar.gz $(PROJECT)-*.tar
 	@rm -f *.log
-
-version:
-	@echo $(VERSION)
 
 # Optional make components we add
 sinclude .make/*.mk
