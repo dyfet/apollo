@@ -20,7 +20,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 	"gitlab.com/tychosoft/service"
 )
 
@@ -54,10 +54,10 @@ func viewMain(ctx *fiber.Ctx) error {
 func viewLines(ctx *fiber.Ctx) error {
 	type Item struct {
 		Id   int
-		Line *ipc.Line
+		Line *apollo.Line
 	}
 
-	lines := ipc.GetLines()
+	lines := apollo.GetLines()
 	items := make([]Item, 0, len(lines))
 	for key, value := range lines {
 		items = append(items, Item{key, value})

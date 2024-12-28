@@ -21,7 +21,7 @@ import (
 
 	"gopkg.in/ini.v1"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 	"gitlab.com/tychosoft/service"
 )
 
@@ -47,11 +47,11 @@ func dynInit(port uint16, tls bool) {
 		dynCoventry = &ini.File{}
 	}
 	section := dynCoventry.Section("server")
-	ipc.SetConfig(section, "webserver", web)
+	apollo.SetConfig(section, "webserver", web)
 	if tls {
-		ipc.SetConfig(section, "urlschema", "https")
+		apollo.SetConfig(section, "urlschema", "https")
 	} else {
-		ipc.SetConfig(section, "urlschema", "http")
+		apollo.SetConfig(section, "urlschema", "http")
 	}
 
 	if !section.HasKey("webadmin") {
@@ -60,13 +60,13 @@ func dynInit(port uint16, tls bool) {
 
 	setupFlag = section.HasKey("webpass")
 	adminUser = &User{
-		Username: ipc.GetConfig(section, "webadmin", "admin"),
-		Password: ipc.GetConfig(section, "webpass", "XXX"),
+		Username: apollo.GetConfig(section, "webadmin", "admin"),
+		Password: apollo.GetConfig(section, "webpass", "XXX"),
 	}
 	err = dynCoventry.SaveTo(iniCoventry)
 	os.Chmod(iniCoventry, 0600)
 	if err == nil {
-		err = ipc.ReloadCoventry()
+		err = apollo.ReloadCoventry()
 	}
 	if err != nil {
 		service.Error(err)

@@ -20,7 +20,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 )
 
 func clientPing(ctx *fiber.Ctx) error {
@@ -30,7 +30,7 @@ func clientPing(ctx *fiber.Ctx) error {
 
 func clientProfile(ctx *fiber.Ctx) error {
 	id := ctx.Locals("userID").(int)
-	profile := ipc.GetLine(id)
+	profile := apollo.GetLine(id)
 	if profile != nil {
 		return ctx.JSON(profile)
 	}
@@ -38,9 +38,9 @@ func clientProfile(ctx *fiber.Ctx) error {
 }
 
 func clientRoster(ctx *fiber.Ctx) error {
-	return ctx.JSON(ipc.GetLines())
+	return ctx.JSON(apollo.GetLines())
 }
 
 func clientGroups(ctx *fiber.Ctx) error {
-	return ctx.JSON(ipc.GetGroups())
+	return ctx.JSON(apollo.GetGroups())
 }

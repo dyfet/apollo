@@ -26,7 +26,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ipinfo/go/v2/ipinfo"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 	"gitlab.com/tychosoft/service"
 )
 
@@ -62,7 +62,7 @@ func postSetup(ctx *fiber.Ctx) error {
 	digest.Write([]byte(passwd + ":" + admin))
 	passwd = hex.EncodeToString(digest.Sum(nil))
 	section.NewKey("webpass", passwd)
-	ipc.SetConfig(section, "webadmin", admin)
+	apollo.SetConfig(section, "webadmin", admin)
 
 	iniCoventry := workingDir + "/dynamic.conf"
 	err := dynCoventry.SaveTo(iniCoventry)
@@ -83,12 +83,12 @@ func postSetup(ctx *fiber.Ctx) error {
 func locationSetup(ctx *fiber.Ctx) error {
 	lock.Lock()
 	defer lock.Unlock()
-	ipc.UpdateCoventry("server", "location", ctx.FormValue("geolocated"))
-	ipc.UpdateCoventry("server", "where", ctx.FormValue("where"))
-	ipc.UpdateCoventry("server", "city", ctx.FormValue("city"))
-	ipc.UpdateCoventry("server", "region", ctx.FormValue("region"))
-	ipc.UpdateCoventry("server", "postal", ctx.FormValue("postal"))
-	ipc.SaveCoventry()
+	apollo.UpdateCoventry("server", "location", ctx.FormValue("geolocated"))
+	apollo.UpdateCoventry("server", "where", ctx.FormValue("where"))
+	apollo.UpdateCoventry("server", "city", ctx.FormValue("city"))
+	apollo.UpdateCoventry("server", "region", ctx.FormValue("region"))
+	apollo.UpdateCoventry("server", "postal", ctx.FormValue("postal"))
+	apollo.SaveCoventry()
 	service.Debug(3, "set where ", ctx.FormValue("where"))
 
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
@@ -124,8 +124,8 @@ func internetSetup(ctx *fiber.Ctx) error {
 
 	lock.Lock()
 	defer lock.Unlock()
-	ipc.UpdateCoventry("server", "token", token)
-	ipc.SaveCoventry()
+	apollo.UpdateCoventry("server", "token", token)
+	apollo.SaveCoventry()
 	service.Debug(3, "set token ", token)
 
 	client := ipinfo.NewClient(nil, nil, token)
@@ -145,21 +145,21 @@ func internetSetup(ctx *fiber.Ctx) error {
 	timezone := info.Timezone
 	service.Info("located: ", location, " ", city, ", ", region, ",", postal, ", ", country)
 
-	ipc.UpdateCoventry("server", "location", location)
-	ipc.UpdateCoventry("server", "city", city)
-	ipc.UpdateCoventry("server", "region", region)
-	ipc.UpdateCoventry("server", "postal", postal)
-	ipc.UpdateCoventry("server", "country", country)
-	ipc.UpdateCoventry("weather", "timezone", timezone)
-	ipc.SaveCoventry()
+	apollo.UpdateCoventry("server", "location", location)
+	apollo.UpdateCoventry("server", "city", city)
+	apollo.UpdateCoventry("server", "region", region)
+	apollo.UpdateCoventry("server", "postal", postal)
+	apollo.UpdateCoventry("server", "country", country)
+	apollo.UpdateCoventry("weather", "timezone", timezone)
+	apollo.SaveCoventry()
 
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }
 
 func themeSetup(ctx *fiber.Ctx) error {
-	server := ipc.GetServer()
-	theme := ipc.GetConfig(server, "theme", "dark")
+	server := apollo.GetServer()
+	theme := apollo.GetConfig(server, "theme", "dark")
 	if theme == "light" {
 		theme = "dark"
 	} else {
@@ -167,8 +167,8 @@ func themeSetup(ctx *fiber.Ctx) error {
 	}
 
 	service.Debug(3, "set theme ", theme)
-	ipc.UpdateCoventry("server", "theme", theme)
-	ipc.SaveCoventry()
+	apollo.UpdateCoventry("server", "theme", theme)
+	apollo.SaveCoventry()
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }

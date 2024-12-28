@@ -20,12 +20,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 	"gitlab.com/tychosoft/service"
 )
 
 func addLine(ctx *fiber.Ctx) error {
-	id, line := ipc.NewLine()
+	id, line := apollo.NewLine()
 	if line == nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString("No lines available")
 	}
@@ -54,7 +54,7 @@ func editLine(ctx *fiber.Ctx) error {
 		id = 0
 	}
 
-	line := ipc.GetLine(id)
+	line := apollo.GetLine(id)
 	if line == nil {
 		return ctx.Status(fiber.StatusNotFound).SendString("Line is invalid")
 	}

@@ -21,7 +21,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 )
 
 func deleteLine(ctx *fiber.Ctx) error {
@@ -35,7 +35,7 @@ func deleteLine(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).SendString("line does not match id")
 	}
 
-	ipc.RemoveLine(id)
+	apollo.RemoveLine(id)
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }
@@ -47,7 +47,7 @@ func passwdLine(ctx *fiber.Ctx) error {
 		id = 0
 	}
 
-	line := ipc.GetLine(id)
+	line := apollo.GetLine(id)
 	if line == nil {
 		return ctx.Status(fiber.StatusNotFound).SendString("Line is invalid")
 	}
@@ -56,7 +56,7 @@ func passwdLine(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changeable")
 	}
 
-	save := ipc.SavedLine(id)
+	save := apollo.SavedLine(id)
 	passwd := ctx.FormValue("pass")
 	verify := ctx.FormValue("verify")
 
@@ -72,15 +72,15 @@ func passwdLine(ctx *fiber.Ctx) error {
 	save.SHA256 = ""
 	save.Secret = ""
 
-	if ipc.HasMD5() {
-		save.MD5 = ipc.ComputeMD5(ext, passwd)
+	if apollo.HasMD5() {
+		save.MD5 = apollo.ComputeMD5(ext, passwd)
 	}
 
-	if ipc.HasSHA256() {
-		save.SHA256 = ipc.ComputeSHA256(ext, passwd)
+	if apollo.HasSHA256() {
+		save.SHA256 = apollo.ComputeSHA256(ext, passwd)
 	}
 
-	ipc.UpdateLine(id, save)
+	apollo.UpdateLine(id, save)
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }
@@ -89,11 +89,11 @@ func postNewLine(ctx *fiber.Ctx) error {
 	ext := ctx.FormValue("ext")
 	id, _ := strconv.Atoi(ext)
 
-	if ipc.ExistsLine(id) {
+	if apollo.ExistsLine(id) {
 		return ctx.Status(fiber.StatusBadRequest).SendString("Line already exists")
 	}
 
-	save := &ipc.Line{}
+	save := &apollo.Line{}
 	save.Type = ctx.FormValue("type")
 	save.Display = ctx.FormValue("display")
 
@@ -113,16 +113,16 @@ func postNewLine(ctx *fiber.Ctx) error {
 	}
 
 	if len(passwd) > 0 {
-		if ipc.HasMD5() {
-			save.MD5 = ipc.ComputeMD5(ext, passwd)
+		if apollo.HasMD5() {
+			save.MD5 = apollo.ComputeMD5(ext, passwd)
 		}
 
-		if ipc.HasSHA256() {
-			save.SHA256 = ipc.ComputeSHA256(ext, passwd)
+		if apollo.HasSHA256() {
+			save.SHA256 = apollo.ComputeSHA256(ext, passwd)
 		}
 	}
 
-	ipc.UpdateLine(id, save)
+	apollo.UpdateLine(id, save)
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }
@@ -134,7 +134,7 @@ func postLine(ctx *fiber.Ctx) error {
 		id = 0
 	}
 
-	line := ipc.GetLine(id)
+	line := apollo.GetLine(id)
 	if line == nil {
 		return ctx.Status(fiber.StatusNotFound).SendString("Line is invalid")
 	}
@@ -143,7 +143,7 @@ func postLine(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).SendString("Custom lines not changeable")
 	}
 
-	save := ipc.SavedLine(id)
+	save := apollo.SavedLine(id)
 
 	if ctx.FormValue("type") != line.Type {
 		save.Type = ctx.FormValue("type")
@@ -179,7 +179,7 @@ func postLine(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
 
-	ipc.UpdateLine(id, save)
+	apollo.UpdateLine(id, save)
 	syscall.Kill(syscall.Getpid(), syscall.SIGHUP)
 	return ctx.Redirect("/lines", fiber.StatusSeeOther)
 }

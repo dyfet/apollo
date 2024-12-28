@@ -31,7 +31,7 @@ import (
 	"github.com/gofiber/template/html/v2"
 	"gopkg.in/ini.v1"
 
-	ipc "apollo/internal"
+	"apollo/internal"
 	"gitlab.com/tychosoft/service"
 )
 
@@ -192,29 +192,29 @@ func load() {
 		service.Error(err)
 	}
 
-	err = ipc.Config(etcPrefix, workingDir)
+	err = apollo.Config(etcPrefix, workingDir)
 	if err != nil {
 		service.Error(err)
 	}
 
 	// set page values from full config...
-	server := ipc.GetServer()
-	forecast := ipc.GetWeather()
-	new_config.Digests = ipc.Algorithm
-	new_config.Realm = ipc.Realm
-	new_config.Admin = ipc.GetConfig(server, "webadmin", "admin")
-	new_config.Theme = ipc.GetConfig(server, "theme", "dark")
-	new_config.IpToken = ipc.GetConfig(server, "token", "*Your API Token*")
-	new_config.Location = ipc.GetConfig(server, "location", "unspecified")
-	new_config.Where = ipc.GetConfig(server, "where", "none")
-	new_config.City = ipc.GetConfig(server, "city", "unknown")
-	new_config.Region = ipc.GetConfig(server, "region", "unknown")
-	new_config.Postal = ipc.GetConfig(server, "postal", "unknown")
+	server := apollo.GetServer()
+	forecast := apollo.GetWeather()
+	new_config.Digests = apollo.Algorithm
+	new_config.Realm = apollo.Realm
+	new_config.Admin = apollo.GetConfig(server, "webadmin", "admin")
+	new_config.Theme = apollo.GetConfig(server, "theme", "dark")
+	new_config.IpToken = apollo.GetConfig(server, "token", "*Your API Token*")
+	new_config.Location = apollo.GetConfig(server, "location", "unspecified")
+	new_config.Where = apollo.GetConfig(server, "where", "none")
+	new_config.City = apollo.GetConfig(server, "city", "unknown")
+	new_config.Region = apollo.GetConfig(server, "region", "unknown")
+	new_config.Postal = apollo.GetConfig(server, "postal", "unknown")
 
-	new_weather.Timezone = ipc.GetConfig(forecast, "timezone", "unknown")
+	new_weather.Timezone = apollo.GetConfig(forecast, "timezone", "unknown")
 
-	common := ipc.GetCommon()
-	new_config.Pass = ipc.GetConfig(common, "password", "")
+	common := apollo.GetCommon()
+	new_config.Pass = apollo.GetConfig(common, "password", "")
 
 	if dynCoventry == nil {
 		dynInit(new_config.Port, new_config.Tls)
@@ -241,9 +241,9 @@ func main() {
 	address := fmt.Sprintf("%s:%v", config.Host, config.Port)
 	aging := 600
 	service.Debug(3, "prefix=", config.Prefix, ", bind=", address)
-	service.Info("realm ", ipc.Realm, ", algo ", ipc.Algorithm)
+	service.Info("realm ", apollo.Realm, ", algo ", apollo.Algorithm)
 	views := appDataDir + "/views_" + config.Views
-	if flag, _ := ipc.IsDir(views); !flag {
+	if flag, _ := apollo.IsDir(views); !flag {
 		views = appDataDir + "/views"
 	}
 	if service.IsDebug() {
@@ -269,7 +269,7 @@ func main() {
 			digest.Write([]byte(pass + ":" + user))
 			return hex.EncodeToString(digest.Sum(nil)) == adminUser.Password
 		},
-		Realm: ipc.Realm,
+		Realm: apollo.Realm,
 	})
 
 	user := func(ctx *fiber.Ctx) error {
@@ -278,7 +278,7 @@ func main() {
 			return fiber.ErrUnauthorized
 		}
 		token := header[7:]
-		id := ipc.VerifyToken(token)
+		id := apollo.VerifyToken(token)
 		if id == 0 {
 			return fiber.ErrUnauthorized
 		}

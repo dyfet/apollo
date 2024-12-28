@@ -8,7 +8,7 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-.PHONY: dist distvet distclean
+.PHONY: dist distvet distclean mindist
 
 dist:	required
 	@rm -f $(PROJECT)-*.tar.gz $(PROJECT)-*.tar
@@ -16,6 +16,11 @@ dist:	required
 	@if test -f vendor/modules.txt ; then \
 		tar --transform s:^:$(PROJECT)-$(VERSION)/: --append --file=$(PROJECT)-$(VERSION).tar vendor ; fi
 	@gzip $(PROJECT)-$(VERSION).tar
+
+mindist:
+	@rm -f $(ARCHIVE)-*.tar.gz $(ARCHIVE)-*.tar
+	@git archive -o $(ARCHIVE)-mindist.tar --format tar --prefix=$(ARCHIVE)-mindist/ HEAD
+	@gzip $(ARCHIVE)-mindist.tar
 
 distvet:	vet
 
