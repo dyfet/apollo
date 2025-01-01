@@ -35,48 +35,38 @@ import (
 	"gitlab.com/tychosoft/service"
 )
 
-// Argument parser....
-type Args struct {
-	Config  string `arg:"--config" help:"server config file"`
-	Host    string `arg:"env:APOLLO_HOST,--host" help:"server host address" default:""`
-	Port    uint16 `arg:"env:APOLLO_PORT,--port" help:"server port" default:"8080"`
-	Prefix  string `arg:"--prefix" help:"server path to coventry data"`
-	Media   string `arg:"--media" help:"server path to bordeaux media"`
-	Tls     bool   `arg:"--tls" help:"Server tls mode"`
-	Verbose int    `arg:"-v" help:"debugging log level"`
-}
-
 // Server config
 type Config struct {
 	// apollo config data
-	Prefix  string `ini:"prefix"`
-	Media   string `ini:"media"`
-	Host    string `ini:"host"`
-	Port    uint16 `ini:"port"`
-	Keyfile string `ini:"keyfile"`
-	Crtfile string `ini:"crtfile"`
-	Tls     bool   `ini:"tls"`
+	Host    string `ini:"host" arg:"--host" help:"server bind"`
+	Port    uint16 `ini:"port" arg:"--port" help:"server port"`
+	Secure  bool   `ini:"secure" arg:"-s,--secure" help:"Server tls mode"`
+	Verbose int    `ini:"verbose" help:"debugging log level (also -v..)"`
+
+	// certificate info
+	Keyfile string `ini:"keyfile" arg:"-"`
+	Crtfile string `ini:"crtfile" arg:"-"`
 
 	// page specific and branding
-	Logo     string `ini:"logo"`
-	Home     string `ini:"home"`
-	Views    string `ini:"views"`
-	Theme    string `ini:"theme"`
-	Weather  string `ini:"weather"`
-	Location string `ini:"location"`
-	Where    string `ini:"where"`
-	City     string `ini:"city"`
-	Region   string `ini:"region"`
-	Postal   string `ini:"postal"`
-	Country  string `ini:"country"`
-	IpToken  string `ini:"token"`
+	Logo     string `ini:"logo" arg:"-"`
+	Home     string `ini:"home" arg:"-"`
+	Views    string `ini:"views" arg:"-"`
+	Theme    string `ini:"theme" arg:"-"`
+	Weather  string `ini:"weather" arg:"-"`
+	Location string `ini:"location" arg:"-"`
+	Where    string `ini:"where" arg:"-"`
+	City     string `ini:"city" arg:"-"`
+	Region   string `ini:"region" arg:"-"`
+	Postal   string `ini:"postal" arg:"-"`
+	Country  string `ini:"country" arg:"-"`
+	IpToken  string `ini:"token" arg:"-"`
 
 	// other config info sent to page
-	Realm    string `ini:"-"`
-	Digests  string `ini:"-"`
-	Admin    string `ini:"-"`
-	Pass     string `ini:"-"`
-	PublicIp string `ini:"-"`
+	Realm    string `ini:"-" arg:"-"`
+	Digests  string `ini:"-" arg:"-"`
+	Admin    string `ini:"-" arg:"-"`
+	Pass     string `ini:"-" arg:"-"`
+	PublicIp string `ini:"-" arg:"-"`
 }
 
 type Weather struct {
@@ -90,24 +80,22 @@ var (
 	// binding configs
 	workingDir = "/var/lib/coventry"
 	appDataDir = "/usr/share/apollo"
-	mediaData  = "/var/lib/bordeaux"
 	etcPrefix  = "/etc"
 	logPrefix  = "/var/log"
 	version    = "unknown"
 	publicIp   = "auto"
 
 	// globals
-	args    *Args    = &Args{Prefix: workingDir, Media: mediaData, Config: etcPrefix + "/apollo.conf"}
 	config  *Config  = nil
 	weather *Weather = nil
 	lock    sync.RWMutex
 )
 
-func (Args) Version() string {
+func (Config) Version() string {
 	return "Version: " + version
 }
 
-func (Args) Description() string {
+func (Config) Description() string {
 	return "apollo - web services for coventry phone system"
 }
 
@@ -135,10 +123,7 @@ func load() {
 	// default config
 	new_config := Config{
 		// service config
-		Host:    args.Host,
-		Port:    args.Port,
-		Prefix:  args.Prefix,
-		Tls:     args.Tls,
+		Port:    8080,
 		Keyfile: "./server.key",
 		Crtfile: "./server.crt",
 
@@ -164,32 +149,18 @@ func load() {
 		Depths:   "inch",
 	}
 
-	configs, err := ini.LoadSources(ini.LoadOptions{Loose: true, Insensitive: true}, args.Config)
+	configs, err := ini.LoadSources(ini.LoadOptions{Loose: true, Insensitive: true}, etcPrefix+"/apollo.conf", workingDir+"/custom.conf")
 	if err == nil {
-		// map and reset from args if not default
 		configs.Section("server").MapTo(&new_config)
+		configs.Section("certs").MapTo(&new_config)
 		configs.Section("weather").MapTo(&new_weather)
-		if args.Port != 8080 {
-			new_config.Port = args.Port
-		}
-
-		if len(args.Host) > 0 {
-			new_config.Host = args.Host
-		}
-
-		if args.Prefix != workingDir {
-			new_config.Prefix = args.Prefix
-		}
-
-		if args.Media != mediaData {
-			new_config.Media = args.Media
-		}
-
-		if new_config.Host == "*" {
-			new_config.Host = ""
-		}
 	} else {
 		service.Error(err)
+	}
+
+	arg.MustParse(&new_config)
+	if new_config.Host == "*" {
+		new_config.Host = ""
 	}
 
 	err = apollo.Config(etcPrefix, workingDir)
@@ -217,7 +188,7 @@ func load() {
 	new_config.Pass = apollo.GetConfig(common, "password", "")
 
 	if dynCoventry == nil {
-		dynInit(new_config.Port, new_config.Tls)
+		dynInit(new_config.Port, new_config.Secure)
 	}
 
 	lock.Lock()
@@ -228,19 +199,19 @@ func load() {
 
 func main() {
 	// config and setup service
-	arg.MustParse(args)
-	logPath := logPrefix + "/apollo.log"
-	service.Logger(args.Verbose, logPath)
-	load()
-	err := os.Chdir(config.Prefix)
+	err := os.Chdir(workingDir)
 	if err != nil {
-		service.Fail(1, err)
+		fmt.Println("Fatal: ", err)
+		os.Exit(1)
 	}
+
+	load()
+	service.Logger(config.Verbose, logPrefix+"/apollo.log")
 
 	// setup app and routes
 	address := fmt.Sprintf("%s:%v", config.Host, config.Port)
 	aging := 600
-	service.Debug(3, "prefix=", config.Prefix, ", bind=", address)
+	service.Debug(3, "prefix=", workingDir, ", bind=", address)
 	service.Info("realm ", apollo.Realm, ", algo ", apollo.Algorithm)
 	views := appDataDir + "/views_" + config.Views
 	if flag, _ := apollo.IsDir(views); !flag {
@@ -344,7 +315,7 @@ func main() {
 	}()
 
 	// start service(s)...
-	if config.Tls {
+	if config.Secure {
 		if err := app.ListenTLS(address, config.Crtfile, config.Keyfile); err != nil {
 			service.Fail(99, err)
 		}

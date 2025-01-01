@@ -24,19 +24,18 @@ DETECT_BORDEAUX = $(shell .make/varlib.sh $(PWD)/web bordeaux)
 all:            build           # default target debug
 required:       vendor          # required to build
 verify:		test		# verify builds
+build:		lint debug	# build defaults
 
 # Define or override custom env
 sinclude custom.mk
 
-build:  lint
+debug:	required
 	@install -d target/debug
 	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.version=$(VERSION) -X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/debug ./...
 
 release:	required
 	@install -d target/release
 	@CGO_ENABLED=1 $(GO) build --buildmode=$(BUILD_MODE) -v -mod vendor -tags release,$(TAGS) -ldflags '-s -w -X main.mediaData=$(LOCALSTATEDIR)/lib/bordeaux -X main.version=$(VERSION) -X main.etcPrefix=$(SYSCONFDIR) -X main.workingDir=$(LOCALSTATEDIR)/lib/coventry -X main.appDataDir=$(APPDATADIR) -X main.logPrefix=$(LOGPREFIXDIR)' -o target/release ./...
-
-debug:	build
 
 # We normally install commandit to a local ~/go/bin for portable tooling
 install:        release
