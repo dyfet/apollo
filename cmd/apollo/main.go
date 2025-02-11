@@ -151,6 +151,7 @@ func load() {
 
 	configs, err := ini.LoadSources(ini.LoadOptions{Loose: true, Insensitive: true}, etcPrefix+"/apollo.conf", workingDir+"/custom.conf")
 	if err == nil {
+		configs.MapTo(&new_config)
 		configs.Section("server").MapTo(&new_config)
 		configs.Section("certs").MapTo(&new_config)
 		configs.Section("weather").MapTo(&new_weather)

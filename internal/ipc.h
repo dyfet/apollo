@@ -88,19 +88,13 @@ int verify_user(pbx_reg_t *map, const char *token) {
 }
 
 // reload coventry
-int reload_coventry(const char *path) {
-    int status = 0;
-    pbx_msg_t msg;
-
-    msg.type = PBX_RELOAD;
-    msg.ver = PBX_VERSION;
-    mqd_t mq = mq_open(path, O_WRONLY, 0660, NULL);
-    if (mq == MQD_INVALID)
-        return -1;
-
-    status = mq_send(mq, (const char *)&msg, sizeof(msg), 0);
-    mq_close(mq);
-    return status;
+pbx_msg_t *reload_coventry() {
+    pbx_msg_t *msg = (pbx_msg_t*)malloc(sizeof(pbx_msg_t));
+    if (msg != NULL) {
+        msg->type = PBX_RELOAD;
+        msg->ver = PBX_VERSION;
+    }
+    return msg;
 }
 
 pbx_reg_t *registry_map(size_t size, int shm) {

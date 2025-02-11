@@ -21,8 +21,11 @@ package apollo
 */
 import "C"
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"net"
 	"os"
 	"unsafe"
 
@@ -32,6 +35,7 @@ import (
 type IpcInfo struct {
 	// common data
 	IPCPath string `json:"ipc_path"`
+	UDPPath string `json:"control_path"`
 
 	// coventry ipc sizes
 	MsgSize   uintptr `json:"msg_size,omitempty"`
@@ -50,6 +54,7 @@ type IpcInfo struct {
 
 var (
 	ipcCoventry string
+	udpCoventry string
 	ipcRegistry uintptr
 	registryMap *C.pbx_reg_t = nil
 	instance                 = 0
@@ -70,14 +75,26 @@ func ipcInstance() int {
 }
 
 func ReloadCoventry() error {
-	cs_path := C.CString(ipcCoventry)
-	defer C.free(unsafe.Pointer(cs_path))
-	result := int(C.reload_coventry(cs_path))
-	instance++
-	if result < 0 {
-		return fmt.Errorf("mqueue error %d", result)
+	ptr := C.reload_coventry()
+	if ptr == nil {
+		return fmt.Errorf("failed to create msg")
 	}
-	return nil
+	defer C.free(unsafe.Pointer(ptr))
+
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.LittleEndian, (*C.pbx_msg_t)(unsafe.Pointer(ptr)))
+	if err != nil {
+		return fmt.Errorf("binary write error: %v", err)
+	}
+	data := buf.Bytes()
+	conn, err := net.Dial("unixgram", udpCoventry)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	_, err = conn.Write(data)
+	return err
 }
 
 func ipcInit(coventry string) {
@@ -98,6 +115,7 @@ func ipcInit(coventry string) {
 		service.Fail(91, fmt.Errorf("IPC size mismatch"))
 	}
 
+	udpCoventry = ipc.UDPPath
 	ipcCoventry = ipc.IPCPath
 	ipcRegistry = (ipc.RegSize * ipc.RegCount) + ipc.SysSize
 
