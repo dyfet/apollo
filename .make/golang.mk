@@ -71,8 +71,7 @@ version:
 	@echo $(VERSION)
 
 tag:	verify
-	@.make/publish.sh $(ORIGIN)
-	@git tag v$(VERSION)
+	@if test -f .make/publish.sh ; then .make/publish.sh $(ORIGIN) ; git tag v$(VERSION) ; fi
 
 # if no vendor directory (clean) or old in git checkouts
 vendor:	go.sum

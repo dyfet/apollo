@@ -11,7 +11,6 @@
 # Project constants
 PROJECT := apollo
 VERSION := 0.3.0
-ORIGIN	:= gitlab:tychosoft/
 PATH	:= $(PWD)/target/debug:${PATH}
 TESTDIR := $(PWD)/web
 
