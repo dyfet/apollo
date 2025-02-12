@@ -16,7 +16,7 @@ Apollo is a Go application that requires Go 1.19 or later, and GNU Make to
 build. Apollo interacts with Coventry thru IPC services and manipulation of
 config files, so it must be co-installed on a server running Coventry to be
 used. Apollo can only be used on platforms that Coventry supports, which may
-include NetBSD (10), FreeBSD, and most Linux kernel based distributions.
+include most BSD and Linux kernel based posix systems.
 
 While most Coventry features can be manipulated over a Web ui thru Apollo, a
 Coventry "custom.conf" can override these settings and produce read-only
