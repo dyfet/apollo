@@ -82,7 +82,6 @@ var (
 	appDataDir = "/usr/share/apollo"
 	etcPrefix  = "/etc"
 	logPrefix  = "/var/log"
-	version    = "unknown"
 	publicIp   = "auto"
 
 	// globals
@@ -90,10 +89,6 @@ var (
 	weather *Weather = nil
 	lock    sync.RWMutex
 )
-
-func (Config) Version() string {
-	return "Version: " + version
-}
 
 func (Config) Description() string {
 	return "apollo - web services for coventry phone system"
@@ -226,7 +221,7 @@ func main() {
 	engine.Reload(service.IsDebug())
 	app := fiber.New(fiber.Config{
 		ServerHeader:          "Apollo",
-		AppName:               "Apollo v" + version,
+		AppName:               "Apollo v1",
 		DisableStartupMessage: true,
 		Views:                 engine,
 	})
