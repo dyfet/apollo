@@ -16,7 +16,7 @@
 </table>
 
 <form id="create" method="POST" action="/lines">
-    <label class="label" for="ext">Extension:</label>
+    <label class="label" for="ext">Line:</label>
     <input class="field" type="number" min="10" max="89" id="ext" name="ext" value="{{ .Id }}">
     <div class="sep"><br></div>
 
@@ -40,7 +40,7 @@
     <input class="field" type="text" id="display" name="display" value="{{ .Line.Display }}">
     <div class="sep"><br></div>
 
-    <label class="label" for="lines">Lines:</label>
+    <label class="label" for="lines">Limit:</label>
     <input class="field" type="number" min="1" max="32" id="lines" name="lines" value="{{ .Line.Lines }}">
     <div class="sep"><br></div>
 

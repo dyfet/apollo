@@ -450,7 +450,7 @@ func updateKeys(cfg *ini.File, id string, data interface{}) error {
 
 func UpdateLine(extension int, line *Line) error {
 	if extension < 10 || extension > 89 {
-		return fmt.Errorf("invalid extension number")
+		return fmt.Errorf("invalid line number")
 	}
 
 	id := strconv.Itoa(extension)
@@ -469,7 +469,7 @@ func UpdateLine(extension int, line *Line) error {
 
 func RemoveLine(extension int) error {
 	if extension < 10 || extension > 89 {
-		return fmt.Errorf("invalid extension number")
+		return fmt.Errorf("invalid line number")
 	}
 
 	coventryUpdate.DeleteSection(strconv.Itoa(extension))
