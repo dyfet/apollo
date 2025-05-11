@@ -11,26 +11,30 @@
 # Project constants
 PROJECT := apollo
 VERSION := 0.3.0
-PATH	:= $(PWD)/target/debug:${PATH}
+PATH	:= $(PWD)/target/test:${PATH}
 TESTDIR := $(PWD)/web
 
 # Debug build detects
 DETECT_COVENTRY = $(shell .make/varlib.sh $(PWD)/web coventry)
 DETECT_BORDEAUX = $(shell .make/varlib.sh $(PWD)/web bordeaux)
 
-.PHONY: all required build debug release install clean verify
+.PHONY: all required build build-test debug release install clean verify
 
 all:            build           # default target debug
 required:       vendor          # required to build
 verify:		test		# verify builds
-build:		lint debug	# build defaults
+build:		lint build-test	# build defaults
 
 # Define or override custom env
 sinclude custom.mk
 
+build-test:	required
+	@install -d target/test
+	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/test ./...
+
 debug:	required
-	@install -d target/debug
-	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/debug ./...
+	@install -d target/debig
+	@CGO_ENABLED=1 $(GO) build -v -mod vendor -tags debug,$(TAGS) -ldflags '-X main.mediaData=$(LOCALSTATEDIR)/lib/bordeaux -X main.etcPrefix=$(SYSCONFDIR) -X main.workingDir=$(LOCALSTATEDIR)/lib/coventry -X main.appDataDir=$(APPDATADIR) -X main.logPrefix=$(LOGPREFIXDIR)' -o target/debug ./...
 
 release:	required
 	@install -d target/release
