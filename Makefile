@@ -10,7 +10,7 @@
 
 # Project constants
 PROJECT := apollo
-VERSION := 0.3.0
+VERSION := 0.3.1
 PATH	:= $(PWD)/target/test:${PATH}
 TESTDIR := $(PWD)/web
 
@@ -30,10 +30,10 @@ sinclude custom.mk
 
 build-test:	required
 	@install -d target/test
-	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.etcPrefix=$(TEST_CONFIG) -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(TEST_APPDIR) -X main.logPrefix=$(TEST_LOGDIR)' -mod vendor -o target/test ./...
+	@CGO_ENABLED=1 $(GO) build -v -tags debug,$(TAGS) -ldflags '-X main.etcPrefix=$(PWD)/web -X main.mediaData=$(DETECT_BORDEAUX) -X main.workingDir=$(DETECT_COVENTRY) -X main.appDataDir=$(PWD)/web -X main.logPrefix=$(PWD)/web' -mod vendor -o target/test ./...
 
 debug:	required
-	@install -d target/debig
+	@install -d target/debug
 	@CGO_ENABLED=1 $(GO) build -v -mod vendor -tags debug,$(TAGS) -ldflags '-X main.mediaData=$(LOCALSTATEDIR)/lib/bordeaux -X main.etcPrefix=$(SYSCONFDIR) -X main.workingDir=$(LOCALSTATEDIR)/lib/coventry -X main.appDataDir=$(APPDATADIR) -X main.logPrefix=$(LOGPREFIXDIR)' -o target/debug ./...
 
 release:	required

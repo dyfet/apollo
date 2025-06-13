@@ -1,4 +1,4 @@
-# Copyright (C) 2023 Tycho Softworks.
+# Copyright (C) 2024 Tycho Softworks.
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -8,49 +8,37 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-# Testing paths can be set for debug
-ifdef WORKINGDIR
-TEST_PREFIX := $(WORKINGDIR)
+PROJECT ?= $(shell basename `git rev-parse --show-toplevel`)
+ifeq ($(OS),Windows_NT)
+OUTPUT  := $(PROJECT).exe
 else
-ifdef LOCALSTATEDIR
-TEST_PREFIX := $(LOCALSTATEDIR)/lib/$(PROJECT)
-else
-TEST_PREFIX := $(TESTDIR)
-endif
-endif
-
-ifdef SYSCONFDIR
-TEST_CONFIG := $(SYSCONFDIR)
-else
-TEST_CONFIG := $(TESTDIR)
-endif
-
-ifdef LOGPREFIXDIR
-TEST_LOGDIR := $(LOGPREFIX)
-else
-ifdef LOCALSTATEDIR
-TEST_LOGDIR := $(LOCALSTATEDIR)/log
-else
-TEST_LOGDIR := $(TESTDIR)
-endif
-endif
-
-ifdef APPDATADIR
-TEST_APPDIR := $(APPDATADIR)
-else
-ifdef DATADIR
-TEST_APPDIR := $(DATADIR)/$(PROJECT)
-else
-ifdef PREFIX
-TEST_APPDIR := $(PREFIX)/share/$(PROJECT)
-else
-TEST_APPDIR := $(TESTDIR)
-endif
-endif
+OUTPUT  := $(PROJECT)
 endif
 
 # Project overrides, starting with prefix install
 TAGS =
+
+ifeq ($(OS),Windows_NT)
+ifndef	PREFIX
+PREFIX := "C:\\Program Files\\$(PROJECT)"
+endif
+
+ifndef	SYSCONFDIR
+SYSCONFDIR := "C:\\ProgramData\\$(PROJECT)"
+endif
+
+ifndef	WORKINGDIR
+WORKINGDIR := "C:\\ProgramData\\$(PROJECT)"
+endif
+
+ifndef	LOCALSTATEDIR
+LOCALSTATEDIR := "C:\\ProgramData\\$(PROJECT)"
+endif
+
+ifndef	RUNPREFIXDIR
+RUNPREFIXDIR := "C:\\ProgramData\\$(PROJECT)"
+endif
+endif
 
 ifndef	DESTDIR
 DESTDIR =
@@ -94,6 +82,10 @@ endif
 
 ifndef	LOGPREFIXDIR
 LOGPREFIXDIR := $(LOCALSTATEDIR)/log
+endif
+
+ifndef RUNPREFIXDIR
+RUNPREFIXDIR := $(LOCALSTATEDOR)/run
 endif
 
 ifndef	WORKINGDIR

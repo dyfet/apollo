@@ -8,7 +8,7 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-.PHONY: lint vet fix test cover stage release upgrade tag
+.PHONY: lint vet fix test cover stage release upgrade
 
 ifndef	BUILD_MODE
 BUILD_MODE := default
@@ -66,12 +66,6 @@ go.sum:	go.mod
 
 upgrade: required
 	@.make/upgrade.sh
-
-version:
-	@echo $(VERSION)
-
-tag:	verify
-	@if test -f .make/publish.sh ; then .make/publish.sh $(ORIGIN) ; git tag v$(VERSION) ; fi
 
 # if no vendor directory (clean) or old in git checkouts
 vendor:	go.sum
